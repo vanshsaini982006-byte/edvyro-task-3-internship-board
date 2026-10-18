@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Internship Board</title>
+  <meta name="description" content="Browse open internships, filter by domain and work mode, and apply.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#results">Skip to internships</a>
+
+  <header class="site-header">
+    <div class="wrap">
+      <h1>Internship Board</h1>
+      <p>Find an internship by title, skill or city, narrow it down by domain and work mode, then apply.</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <form id="filter-form" class="filters" role="search" aria-label="Search and filter internships">
+      <div class="field field-search">
+        <label for="search">Search</label>
+        <input id="search" name="search" type="search" placeholder="Title, skill or city" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="domain">Domain</label>
+        <select id="domain" name="domain">
+          <option value="">All domains</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="mode">Work mode</label>
+        <select id="mode" name="mode">
+          <option value="">All work modes</option>
+          <option value="Remote">Remote</option>
+          <option value="Hybrid">Hybrid</option>
+          <option value="On-site">On-site</option>
+        </select>
+      </div>
+      <div class="actions">
+        <button type="submit" class="btn btn-primary">Search</button>
+        <button type="button" id="clear-filters" class="btn">Clear</button>
+      </div>
+    </form>
+
+    <section id="results" aria-labelledby="results-heading" tabindex="-1">
+      <h2 id="results-heading">Internships</h2>
+      <p id="result-summary" class="summary" role="status" aria-live="polite"></p>
+
+      <div id="state-loading" class="state" hidden>
+        <span class="spinner" aria-hidden="true"></span>
+        <p>Loading internships…</p>
+      </div>
+
+      <div id="state-error" class="state state-error" role="alert" hidden>
+        <p id="state-error-text"></p>
+        <button type="button" id="retry-list" class="btn btn-primary">Try again</button>
+      </div>
+
+      <div id="state-empty" class="state" hidden>
+        <p>No internships match your search. Try a different word, or remove a filter.</p>
+        <button type="button" id="empty-clear" class="btn">Clear search and filters</button>
+      </div>
+
+      <ul id="card-list" class="cards" hidden></ul>
+
+      <nav id="pagination" class="pagination" aria-label="Pagination" hidden>
+        <button type="button" id="page-prev" class="btn">Previous</button>
+        <span id="page-status" class="page-status"></span>
+        <button type="button" id="page-next" class="btn">Next</button>
+      </nav>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>Data comes from the REST API at <code>/api/internships</code>.</p>
+    </div>
+  </footer>
+
+  <dialog id="details-dialog" aria-labelledby="dialog-title">
+    <div class="dialog-inner">
+      <div class="dialog-head">
+        <h2 id="dialog-title">Internship details</h2>
+        <button type="button" id="dialog-close" class="btn">Close</button>
+      </div>
+
+      <div id="dialog-loading" class="state" hidden>
+        <span class="spinner" aria-hidden="true"></span>
+        <p>Loading details…</p>
+      </div>
+
+      <div id="dialog-error" class="state state-error" role="alert" hidden>
+        <p id="dialog-error-text"></p>
+        <button type="button" id="dialog-retry" class="btn btn-primary">Try again</button>
+      </div>
+
+      <div id="dialog-content" hidden>
+        <dl class="details">
+          <div><dt>Domain</dt><dd id="detail-domain"></dd></div>
+          <div><dt>Work mode</dt><dd id="detail-mode"></dd></div>
+          <div><dt>Location</dt><dd id="detail-location"></dd></div>
+          <div><dt>Openings</dt><dd id="detail-openings"></dd></div>
+        </dl>
+
+        <h3 id="skills-heading">Skills</h3>
+        <ul id="detail-skills" class="chips" aria-labelledby="skills-heading"></ul>
+
+        <h3 id="apply-heading">Apply for this internship</h3>
+        <p id="no-openings" hidden>This internship has no open positions right now.</p>
+
+        <form id="apply-form" novalidate aria-labelledby="apply-heading">
+          <p id="apply-target" class="apply-target"></p>
+          <p class="hint">Fields marked * are required.</p>
+          <div class="field">
+            <label for="applicant-name">Full name *</label>
+            <input id="applicant-name" name="applicant_name" type="text" autocomplete="name" maxlength="100" required aria-required="true" aria-describedby="applicant-name-error">
+            <p id="applicant-name-error" class="field-error"></p>
+          </div>
+          <div class="field">
+            <label for="applicant-email">Email address *</label>
+            <input id="applicant-email" name="applicant_email" type="email" autocomplete="email" maxlength="254" required aria-required="true" aria-describedby="applicant-email-error">
+            <p id="applicant-email-error" class="field-error"></p>
+          </div>
+          <div class="field">
+            <label for="resume-url">Resume link *</label>
+            <input id="resume-url" name="resume_url" type="url" inputmode="url" autocomplete="url" maxlength="2048" required aria-required="true" aria-describedby="resume-url-hint resume-url-error">
+            <p id="resume-url-hint" class="hint">A public link starting with http:// or https://, for example a Google Drive or portfolio link.</p>
+            <p id="resume-url-error" class="field-error"></p>
+          </div>
+          <div class="field">
+            <label for="cover-letter">Cover letter (optional)</label>
+            <textarea id="cover-letter" name="cover_letter" rows="5" maxlength="2000" aria-describedby="cover-letter-hint cover-letter-error"></textarea>
+            <p id="cover-letter-hint" class="hint"><span id="cover-letter-count">0</span> of 2000 characters used.</p>
+            <p id="cover-letter-error" class="field-error"></p>
+          </div>
+          <p id="apply-progress" class="form-message form-message-info" role="status"></p>
+          <p id="apply-error" class="form-message form-message-error" role="alert"></p>
+          <p id="apply-success" class="form-message form-message-success" role="status" tabindex="-1"></p>
+          <button type="submit" id="apply-submit" class="btn btn-primary">Submit application</button>
+        </form>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
