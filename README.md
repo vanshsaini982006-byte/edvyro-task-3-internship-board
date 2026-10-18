@@ -215,8 +215,7 @@ Any Node.js 22.13+ host works (the Task 2 version is on Render).
 
 ## 16. Live demo
 
-The Task 2 version is deployed at https://edvyro-task-2-internship-board.onrender.com.
-**The Task 3 changes have not been deployed from this environment**, so no Task 3 live URL is claimed. After you push and Render redeploys, check `/api/health` and an application submission before relying on it.
+🚀 Live Website:https://edvyro-task-3-internship-board.onrender.com
 
 ## 17. Two-minute walkthrough
 
