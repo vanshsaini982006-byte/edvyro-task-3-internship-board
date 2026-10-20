@@ -1,0 +1,18 @@
+# Render Blueprint for the FREE plan (optional: you can also create the service by hand in the dashboard).
+# Render Free has NO persistent disk: the SQLite file is recreated (and re-seeded) whenever the
+# service restarts, spins down after being idle, or is redeployed. See "Known limitations" in README.md.
+services:
+  - type: web
+    name: internship-board
+    runtime: node
+    plan: free
+    buildCommand: npm ci --omit=dev
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: NODE_ENV
+        value: production
+      - key: TRUST_PROXY
+        value: "1"

@@ -1,0 +1,262 @@
+{
+  "generatedAt": "2026-10-19T09:58:22.426Z",
+  "baseUrl": "http://127.0.0.1:3400",
+  "browser": "HeadlessChrome/153.0.8010.0",
+  "lighthouse": {
+    "mobile": {
+      "runs": [
+        {
+          "scores": {
+            "performance": 70,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "rawScores": {
+            "performance": 0.7,
+            "accessibility": 1,
+            "best-practices": 1,
+            "seo": 1
+          },
+          "metrics": {
+            "fcpMs": 1379,
+            "lcpMs": 1844,
+            "tbtMs": 720,
+            "cls": 0.12,
+            "speedIndexMs": 7417,
+            "interactiveMs": 2254
+          },
+          "totalTransferBytes": 38299,
+          "requests": 6,
+          "failedAudits": [
+            "first-contentful-paint: First Contentful Paint",
+            "largest-contentful-paint: Largest Contentful Paint",
+            "speed-index: Speed Index",
+            "total-blocking-time: Total Blocking Time",
+            "max-potential-fid: Max Potential First Input Delay",
+            "cumulative-layout-shift: Cumulative Layout Shift",
+            "interactive: Time to Interactive",
+            "mainthread-work-breakdown: Minimize main-thread work",
+            "layout-shifts: Avoid large layout shifts",
+            "unminified-javascript: Minify JavaScript",
+            "cls-culprits-insight: Layout shift culprits",
+            "document-latency-insight: Document request latency",
+            "lcp-breakdown-insight: LCP breakdown",
+            "network-dependency-tree-insight: Network dependency tree",
+            "render-blocking-insight: Render-blocking requests"
+          ],
+          "lighthouseVersion": "13.5.0",
+          "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36"
+        },
+        {
+          "scores": {
+            "performance": 96,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "rawScores": {
+            "performance": 0.96,
+            "accessibility": 1,
+            "best-practices": 1,
+            "seo": 1
+          },
+          "metrics": {
+            "fcpMs": 1038,
+            "lcpMs": 1038,
+            "tbtMs": 0,
+            "cls": 0.12,
+            "speedIndexMs": 2274,
+            "interactiveMs": 1061
+          },
+          "totalTransferBytes": 38299,
+          "requests": 6,
+          "failedAudits": [
+            "speed-index: Speed Index",
+            "max-potential-fid: Max Potential First Input Delay",
+            "cumulative-layout-shift: Cumulative Layout Shift",
+            "mainthread-work-breakdown: Minimize main-thread work",
+            "layout-shifts: Avoid large layout shifts",
+            "unminified-javascript: Minify JavaScript",
+            "cls-culprits-insight: Layout shift culprits",
+            "document-latency-insight: Document request latency",
+            "network-dependency-tree-insight: Network dependency tree",
+            "render-blocking-insight: Render-blocking requests"
+          ],
+          "lighthouseVersion": "13.5.0",
+          "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36"
+        },
+        {
+          "scores": {
+            "performance": 100,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "rawScores": {
+            "performance": 1,
+            "accessibility": 1,
+            "best-practices": 1,
+            "seo": 1
+          },
+          "metrics": {
+            "fcpMs": 1175,
+            "lcpMs": 1175,
+            "tbtMs": 0,
+            "cls": 0.03,
+            "speedIndexMs": 1440,
+            "interactiveMs": 1175
+          },
+          "totalTransferBytes": 38299,
+          "requests": 6,
+          "failedAudits": [
+            "first-contentful-paint: First Contentful Paint",
+            "mainthread-work-breakdown: Minimize main-thread work",
+            "unminified-javascript: Minify JavaScript",
+            "document-latency-insight: Document request latency",
+            "network-dependency-tree-insight: Network dependency tree",
+            "render-blocking-insight: Render-blocking requests"
+          ],
+          "lighthouseVersion": "13.5.0",
+          "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36"
+        }
+      ],
+      "median": {
+        "performance": 96,
+        "accessibility": 100,
+        "bestPractices": 100,
+        "seo": 100,
+        "fcpMs": 1175,
+        "lcpMs": 1175,
+        "tbtMs": 0,
+        "cls": 0.12,
+        "speedIndexMs": 2274
+      }
+    },
+    "desktop": {
+      "runs": [
+        {
+          "scores": {
+            "performance": 99,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "rawScores": {
+            "performance": 0.99,
+            "accessibility": 1,
+            "best-practices": 1,
+            "seo": 1
+          },
+          "metrics": {
+            "fcpMs": 364,
+            "lcpMs": 446,
+            "tbtMs": 5,
+            "cls": 0,
+            "speedIndexMs": 1281,
+            "interactiveMs": 446
+          },
+          "totalTransferBytes": 38299,
+          "requests": 6,
+          "failedAudits": [
+            "speed-index: Speed Index",
+            "max-potential-fid: Max Potential First Input Delay",
+            "mainthread-work-breakdown: Minimize main-thread work",
+            "unminified-javascript: Minify JavaScript",
+            "document-latency-insight: Document request latency",
+            "network-dependency-tree-insight: Network dependency tree",
+            "render-blocking-insight: Render-blocking requests"
+          ],
+          "lighthouseVersion": "13.5.0",
+          "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36"
+        },
+        {
+          "scores": {
+            "performance": 96,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "rawScores": {
+            "performance": 0.96,
+            "accessibility": 1,
+            "best-practices": 1,
+            "seo": 1
+          },
+          "metrics": {
+            "fcpMs": 382,
+            "lcpMs": 474,
+            "tbtMs": 94,
+            "cls": 0.045,
+            "speedIndexMs": 1899,
+            "interactiveMs": 636
+          },
+          "totalTransferBytes": 38299,
+          "requests": 6,
+          "failedAudits": [
+            "speed-index: Speed Index",
+            "total-blocking-time: Total Blocking Time",
+            "max-potential-fid: Max Potential First Input Delay",
+            "cumulative-layout-shift: Cumulative Layout Shift",
+            "mainthread-work-breakdown: Minimize main-thread work",
+            "unminified-javascript: Minify JavaScript",
+            "document-latency-insight: Document request latency",
+            "network-dependency-tree-insight: Network dependency tree",
+            "render-blocking-insight: Render-blocking requests"
+          ],
+          "lighthouseVersion": "13.5.0",
+          "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36"
+        },
+        {
+          "scores": {
+            "performance": 78,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "rawScores": {
+            "performance": 0.78,
+            "accessibility": 1,
+            "best-practices": 1,
+            "seo": 1
+          },
+          "metrics": {
+            "fcpMs": 457,
+            "lcpMs": 585,
+            "tbtMs": 357,
+            "cls": 0.045,
+            "speedIndexMs": 2733,
+            "interactiveMs": 1103
+          },
+          "totalTransferBytes": 38299,
+          "requests": 6,
+          "failedAudits": [
+            "speed-index: Speed Index",
+            "total-blocking-time: Total Blocking Time",
+            "max-potential-fid: Max Potential First Input Delay",
+            "cumulative-layout-shift: Cumulative Layout Shift",
+            "mainthread-work-breakdown: Minimize main-thread work",
+            "unminified-javascript: Minify JavaScript",
+            "document-latency-insight: Document request latency",
+            "forced-reflow-insight: Forced reflow",
+            "network-dependency-tree-insight: Network dependency tree",
+            "render-blocking-insight: Render-blocking requests"
+          ],
+          "lighthouseVersion": "13.5.0",
+          "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36"
+        }
+      ],
+      "median": {
+        "performance": 96,
+        "accessibility": 100,
+        "bestPractices": 100,
+        "seo": 100,
+        "fcpMs": 382,
+        "lcpMs": 474,
+        "tbtMs": 94,
+        "cls": 0.045,
+        "speedIndexMs": 1899
+      }
+    }
+  }
+}

@@ -35,6 +35,8 @@ function loadConfig(env = process.env) {
     publicApiBaseUrl: toOrigin(env.PUBLIC_API_BASE_URL),
     // Number of reverse proxies in front of the app (0 = none). Needed for correct client IPs.
     trustProxy: Number.parseInt(env.TRUST_PROXY, 10) > 0 ? Number.parseInt(env.TRUST_PROXY, 10) : 0,
+    // How long browsers may reuse CSS/JS without asking again (seconds). 0 = always revalidate.
+    staticMaxAgeSeconds: toInt(env.STATIC_MAX_AGE_SECONDS, isProduction ? 300 : 0),
     rateLimit: {
       windowMs: toInt(env.RATE_LIMIT_WINDOW_MS, 15 * 60 * 1000),
       apiMax: toInt(env.RATE_LIMIT_API_MAX, isTest ? open : 300),

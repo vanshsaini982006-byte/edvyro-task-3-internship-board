@@ -40,10 +40,8 @@ function createApplication(req, res) {
     }
   });
 
-  // Privacy: log only the internship ID. Never the name, email, resume link or cover letter.
-  if (process.env.NODE_ENV !== 'test') {
-    console.log(`Application submitted for internship ${internshipId}`);
-  }
+  // Privacy: log only the internship ID and request ID. Never the name, email, resume link or cover letter.
+  req.app.locals.logger.info('application submitted', { requestId: req.id, internshipId });
 
   sendSuccess(
     res,

@@ -1,29 +1,35 @@
-# Two-minute walkthrough script
+# Two-minute walkthrough video script
 
-Roughly 10 seconds per step. Have the server running (`npm start`) and a terminal plus a browser ready. Use Git Bash or `curl.exe` on Windows.
+A simple script for recording a screen-capture video of about two minutes. Speak slowly. It is fine to run a little over or under.
 
-| # | Time | Show | Say |
-|---|------|------|-----|
-| 1 | 0:00 | Project folder in the editor | "Routes, controllers, middleware, database and tests are in separate folders." |
-| 2 | 0:10 | `database/schema.sql` | "Two tables: `internships` and `applications`. Skills are JSON text. Applications have a UNIQUE rule on internship and email." |
-| 3 | 0:20 | `database/seed.sql` | "The five seed records `INT-101` to `INT-105`, inserted with `INSERT OR IGNORE`." |
-| 4 | 0:30 | `curl http://localhost:3000/api/internships` | "List endpoint with the success envelope and pagination block." |
-| 5 | 0:40 | `?page=1&limit=2`, `?search=frontend`, `?domain=UI/UX`, `?mode=Remote` | "Pagination, search and both filters. They also combine." |
-| 6 | 0:55 | `GET /api/internships/INT-101`, then `/INVALID` | "Detail returns 200. A missing ID returns 404 with the error envelope." |
-| 7 | 1:05 | `POST /api/internships` (INT-106), then `PUT` | "Create returns 201, update returns 200. The ID cannot be changed." |
-| 8 | 1:20 | `DELETE /api/internships/INT-106` | "Delete returns 200." |
-| 9 | 1:25 | `POST /api/applications`, then repeat it | "First is 201. The same email again is 409 `DUPLICATE_APPLICATION`." |
-| 10 | 1:40 | A POST with a missing title and invalid mode | "400 with per-field messages. Same error shape everywhere." |
-| 11 | 1:50 | Stop the server (Ctrl+C), `npm start`, fetch `INT-101` / the created record | "Data is still there: it lives in the SQLite file, not in memory." |
-| 12 | 2:00 | (optional) Browser at `http://localhost:3000` | "The front end uses the same API: search, filters, details dialog, apply form." |
+**Video link:** `PASTE YOUR VIDEO LINK HERE AFTER YOU UPLOAD IT` (YouTube "unlisted", Google Drive with link sharing, or Loom).
+Then copy the same link into the README (section "Walkthrough video").
 
-## Task 3 additions (replace steps 9 and 12 with these for a Task 3 demo)
+## Before you record (5 minutes)
 
-| # | Show | Say |
-|---|------|-----|
-| A | Browser: search `sql`, filter Hybrid, then search `zzz` and press Clear | "Cards come from the API. Empty state is helpful." |
-| B | Stop the server, press Search, then start it and press Try again | "Friendly error and a working retry." |
-| C | Open an internship, submit the form empty | "Field-specific messages, focus goes to the first error." |
-| D | Enter resume `javascript:alert(1)` | "Blocked in the browser, and the server rejects it too (show the curl 400)." |
-| E | Submit a valid application, then the same email again | "201 and a confirmation, then a clear duplicate message. The UNIQUE constraint backs this up." |
-| F | `npm test` | "137 tests, including rate limiting and a jsdom run of the real frontend." |
+1. Use a **fresh database** so the demo starts clean: close the app, delete `database\internship-board.db`, then run `npm start`.
+2. Open two browser tabs: the **live Render website** (or `http://localhost:3000`) and `/api/health`.
+3. Resize the browser window to normal desktop size. Close other tabs and notifications.
+4. Have a **second PowerShell window** ready in the project folder (for the test run).
+5. Pick demo data to type: name `Asha Verma`, email `asha@example.com`, resume `https://example.com/asha-resume.pdf`.
+6. Practise once. Windows: **Win + G** (Xbox Game Bar) or **OBS Studio** (free) can record the screen.
+
+## Script (target 2:00)
+
+| Time | What to show | What to say (read aloud, change the words if you like) |
+|------|--------------|-------------------------------------------------------|
+| 0:00 – 0:10 | **Introduction.** Homepage top | "Hi, I'm *your name*. This is my EdVyro Task 4 project, the Internship Board: a full-stack portal built with Node.js, Express, SQLite and plain HTML, CSS and JavaScript." |
+| 0:10 – 0:25 | **Homepage and listings.** Scroll slowly past the hero to the cards | "The landing page has a menu, a short introduction and the internship cards. Every card is loaded from my REST API, not typed into the page. Each card shows the domain, work mode, location, openings and skills." |
+| 0:25 – 0:45 | **Search and filters.** Type `sql`, then choose Mode = Hybrid, then Clear. Type `zzz` to show the empty message | "I can search by title, domain, location or skill. Results update as I type. I can also filter by domain and work mode. If nothing matches, I get a helpful message and a Clear button. Notice the page address changes, so I could share this exact search." |
+| 0:45 – 0:55 | **Pagination and responsive.** (If there is only one page, skip pagination.) Press `F12`, click the device icon, choose a phone width (360) and show the menu button and the cards in one column | "The layout is responsive. At phone width the menu collapses into a button, the cards stack, and there is no sideways scrolling." |
+| 0:55 – 1:10 | **Internship details.** Click *View details* on one card. Show skills and the form. Press `Esc` | "The details open in an accessible dialog. It can be closed with Escape, and the keyboard focus goes back to the button I used." |
+| 1:10 – 1:35 | **Application form, validation and duplicates.** Open details again. Click Submit with empty fields. Type `javascript:alert(1)` as the resume link and submit. Fix it with the `https://` link and submit. Then apply again with the same email | "Empty fields show clear messages next to each field. A dangerous link such as `javascript:` is rejected. A valid application gives a confirmation with a reference number. If I apply again with the same email for the same internship, I get a friendly duplicate message. The database itself also enforces this rule." |
+| 1:35 – 1:50 | **Backend, API and security.** Switch to the `/api/health` tab, then the PowerShell window: run `npm test` and let the summary show | "The API reports its own health, including the database. I have **N** automated tests covering the API, validation, duplicates, security headers, rate limiting, logging and the front end. Security includes Helmet headers, a strict Content Security Policy, rate limiting, size limits and parameterised SQL. Logs never contain applicant names, emails, resume links or cover letters." *(Replace N with the number your own `npm test` prints.)* |
+| 1:50 – 2:00 | **Deployment and conclusion.** Show the live Render URL in the address bar | "It is deployed on Render's free plan. The free plan has no permanent disk, so the demo database can reset when the service restarts. Thank you for watching." |
+
+## Tips
+
+- If Render has been idle it can take about a minute to wake up. Open the live site **before** recording so it is awake.
+- If you make a mistake, keep going or re-record that part only; you can trim in any simple editor.
+- Do not show `.env` files or any real personal data. The demo email above is fake.
+- Upload the video, copy the link, and paste it at the top of this file and into the README.

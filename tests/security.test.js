@@ -50,6 +50,9 @@ describe('Secure HTTP headers', () => {
       assert.equal(res.headers.get('x-frame-options'), 'SAMEORIGIN', url);
       assert.equal(res.headers.get('referrer-policy'), 'no-referrer', url);
       assert.ok(res.headers.get('strict-transport-security'), url);
+      assert.match(res.headers.get('permissions-policy'), /camera=\(\)/, url);
+      assert.equal(res.headers.get('cross-origin-resource-policy'), 'same-origin', url);
+      assert.equal(res.headers.get('cross-origin-opener-policy'), 'same-origin', url);
     }
   });
 
@@ -126,8 +129,13 @@ describe('Rate limiting (429)', () => {
   test('the general API limit also returns 429', async () => {
     const baseUrl = await startApp({ RATE_LIMIT_API_MAX: '4' });
     const statuses = [];
-    for (let i = 0; i < 6; i++) statuses.push((await request(baseUrl, 'GET', '/api/health')).status);
+    for (let i = 0; i < 6; i++) statuses.push((await request(baseUrl, 'GET', '/api/domains')).status);
     assert.deepEqual(statuses, [200, 200, 200, 200, 429, 429]);
+  });
+
+  test('the health check is exempt from the limiter, so hosting health pings can never be blocked', async () => {
+    const baseUrl = await startApp({ RATE_LIMIT_API_MAX: '2' });
+    for (let i = 0; i < 6; i++) assert.equal((await request(baseUrl, 'GET', '/api/health')).status, 200);
   });
 
   test('invalid or missing limit settings fall back to safe defaults', () => {
@@ -191,12 +199,30 @@ describe('Safe errors', () => {
 
   test('the applications endpoint does not log applicant details', async () => {
     const source = fs.readFileSync(path.join(__dirname, '..', 'src', 'controllers', 'applicationController.js'), 'utf8');
-    const logLines = source.split('\n').filter((line) => line.includes('console.'));
+    const logLines = source.split('\n').filter((line) => line.includes('console.') || line.includes('logger.'));
+    assert.ok(logLines.length > 0, 'expected the controller to log the submission');
     for (const line of logLines) {
       for (const field of ['applicantName', 'applicantEmail', 'resumeUrl', 'coverLetter', 'req.body']) {
         assert.ok(!line.includes(field), `log line mentions ${field}: ${line}`);
       }
     }
+  });
+});
+
+describe('SQL injection through the list endpoint', () => {
+  test('injection strings in search, domain and mode are treated as plain text', async () => {
+    const baseUrl = await startApp();
+    const attacks = ["' OR 1=1 --", "'; DROP TABLE internships; --", '" OR ""="', "%' UNION SELECT * FROM applications --", '\\', '%', '_'];
+    for (const attack of attacks) {
+      for (const field of ['search', 'domain']) {
+        const res = await request(baseUrl, 'GET', `/api/internships?${field}=${encodeURIComponent(attack)}`);
+        assert.equal(res.status, 200, `${field}=${attack}`);
+        assert.equal(res.body.data.length, 0, `${field}=${attack} must match nothing, not everything`);
+      }
+      const mode = await request(baseUrl, 'GET', `/api/internships?mode=${encodeURIComponent(attack)}`);
+      assert.equal(mode.status, 400, 'an unknown mode is rejected by validation');
+    }
+    assert.equal(database.db.prepare('SELECT COUNT(*) AS n FROM internships').get().n, 5);
   });
 });
 

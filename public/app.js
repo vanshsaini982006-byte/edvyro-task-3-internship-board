@@ -6,12 +6,16 @@
 (function () {
   var PAGE_SIZE = 6;
   var COVER_LETTER_MAX = 2000;
+  var SEARCH_DELAY_MS = 300; // wait for a pause in typing before searching
   // config.js (served by the backend) sets the API address. Empty means "this same server".
   var API_BASE = (window.APP_CONFIG && window.APP_CONFIG.apiBaseUrl) || '';
 
   function byId(id) { return document.getElementById(id); }
 
   var els = {
+    navToggle: byId('nav-toggle'),
+    nav: byId('site-nav'),
+
     form: byId('filter-form'),
     search: byId('search'),
     domain: byId('domain'),
@@ -60,13 +64,20 @@
     applyProgress: byId('apply-progress'),
     applyError: byId('apply-error'),
     applySuccess: byId('apply-success'),
-    applySubmit: byId('apply-submit')
+    applySubmit: byId('apply-submit'),
+    confirmation: byId('apply-confirmation'),
+    confirmRef: byId('confirm-ref'),
+    confirmClose: byId('confirm-close')
   };
 
   var state = { page: 1, search: '', domain: '', mode: '' };
   var latestListRequest = 0;
+  var listController = null; // lets a newer search cancel an older one that is still in flight
+  var searchTimer = null;
+  var focusResultsAfterLoad = false;
   var lastTrigger = null;
   var currentInternshipId = null;
+  var currentInternshipTitle = '';
   var totalPages = 1;
 
   // ---------- API helper ----------
@@ -86,7 +97,8 @@
           function () { return { response: response, payload: null }; }
         );
       },
-      function () {
+      function (error) {
+        if (error && error.name === 'AbortError') throw new ApiRequestError('Request cancelled.', { code: 'ABORTED' });
         throw new ApiRequestError('Could not reach the server. Check that it is running, then try again.', { code: 'NETWORK_ERROR' });
       }
     ).then(function (result) {
@@ -117,6 +129,46 @@
     return count + (count === 1 ? ' opening' : ' openings');
   }
 
+  function pillClass(mode) {
+    return 'pill pill-' + String(mode).toLowerCase().replace(/[^a-z]+/g, '-');
+  }
+
+  // ---------- Navigation (mobile menu) ----------
+
+  function setMenu(open) {
+    els.nav.classList.toggle('is-open', open);
+    els.navToggle.setAttribute('aria-expanded', String(open));
+    els.navToggle.textContent = open ? 'Close menu' : 'Menu';
+  }
+
+  // ---------- Shareable page address (?search=&domain=&mode=&page=) ----------
+
+  function readUrlState() {
+    var params = new URLSearchParams(window.location.search);
+    var page = Number(params.get('page'));
+    state.page = Number.isSafeInteger(page) && page >= 1 ? page : 1;
+    state.search = (params.get('search') || '').trim().slice(0, 100);
+    state.domain = (params.get('domain') || '').trim().slice(0, 100);
+    var mode = params.get('mode') || '';
+    state.mode = ['Remote', 'Hybrid', 'On-site'].indexOf(mode) >= 0 ? mode : '';
+    els.search.value = state.search;
+    els.mode.value = state.mode;
+  }
+
+  function writeUrlState() {
+    var params = new URLSearchParams();
+    if (state.search) params.set('search', state.search);
+    if (state.domain) params.set('domain', state.domain);
+    if (state.mode) params.set('mode', state.mode);
+    if (state.page > 1) params.set('page', String(state.page));
+    var query = params.toString();
+    try {
+      window.history.replaceState(null, '', window.location.pathname + (query ? '?' + query : '') + window.location.hash);
+    } catch (e) {
+      // Not important: the page still works without a shareable address.
+    }
+  }
+
   // ---------- Internship list ----------
 
   function showView(view) {
@@ -128,16 +180,18 @@
   }
 
   function renderCards(items) {
-    els.list.textContent = '';
+    var fragment = document.createDocumentFragment(); // one DOM update instead of one per card
     items.forEach(function (item) {
       var card = make('li', 'card');
-      card.appendChild(make('h3', 'card-title', item.title));
       card.appendChild(make('p', 'card-domain', item.domain));
+      card.appendChild(make('h3', 'card-title', item.title));
 
       var facts = make('ul', 'card-facts');
-      facts.appendChild(make('li', '', item.mode));
+      var mode = make('li');
+      mode.appendChild(make('span', pillClass(item.mode), item.mode));
+      facts.appendChild(mode);
       facts.appendChild(make('li', '', item.location));
-      facts.appendChild(make('li', '', openingsText(item.openings)));
+      facts.appendChild(make('li', item.openings === 0 ? 'openings openings-none' : 'openings', openingsText(item.openings)));
       card.appendChild(facts);
 
       var skills = make('ul', 'chips');
@@ -151,8 +205,10 @@
       button.addEventListener('click', function () { openDetails(item.id, button); });
       card.appendChild(button);
 
-      els.list.appendChild(card);
+      fragment.appendChild(card);
     });
+    els.list.textContent = '';
+    els.list.appendChild(fragment);
   }
 
   function renderPagination(pagination) {
@@ -166,15 +222,20 @@
 
   function loadInternships() {
     var requestId = ++latestListRequest;
+    if (listController) listController.abort(); // stop the older request: its answer is no longer wanted
+    listController = typeof window.AbortController === 'function' ? new window.AbortController() : null;
+
     showView('loading');
     els.summary.textContent = 'Loading internships…';
+    writeUrlState();
 
     var params = new URLSearchParams({ page: String(state.page), limit: String(PAGE_SIZE) });
     if (state.search) params.set('search', state.search);
     if (state.domain) params.set('domain', state.domain);
     if (state.mode) params.set('mode', state.mode);
 
-    return apiRequest('/internships?' + params.toString()).then(
+    var options = listController ? { signal: listController.signal } : undefined;
+    return apiRequest('/internships?' + params.toString(), options).then(
       function (payload) {
         if (requestId !== latestListRequest) return; // a newer request replaced this one
         var items = payload.data;
@@ -198,6 +259,12 @@
         var last = first + items.length - 1;
         els.summary.textContent = 'Showing ' + first + '–' + last + ' of ' + pagination.total +
           (pagination.total === 1 ? ' internship' : ' internships');
+
+        if (focusResultsAfterLoad) {
+          focusResultsAfterLoad = false;
+          els.results.focus(); // keyboard and screen-reader users land at the top of the new page of results
+          els.results.scrollIntoView();
+        }
       },
       function (error) {
         if (requestId !== latestListRequest) return;
@@ -209,20 +276,23 @@
   }
 
   function loadDomainOptions() {
-    return apiRequest('/internships?limit=100').then(function (payload) {
-      var seen = {};
-      payload.data.forEach(function (item) { seen[item.domain] = true; });
-      Object.keys(seen).sort(function (a, b) { return a.localeCompare(b); }).forEach(function (name) {
+    return apiRequest('/domains').then(function (payload) {
+      var fragment = document.createDocumentFragment();
+      payload.data.forEach(function (name) {
         var option = make('option', '', name);
         option.value = name;
-        els.domain.appendChild(option);
+        fragment.appendChild(option);
       });
+      els.domain.appendChild(fragment);
+      els.domain.value = state.domain; // restores a domain taken from the page address
+      if (els.domain.value !== state.domain) els.domain.value = '';
     }).catch(function () {
       // The list request reports connection problems, so nothing to do here.
     });
   }
 
   function applyFilters() {
+    window.clearTimeout(searchTimer);
     state.search = els.search.value.trim();
     state.domain = els.domain.value;
     state.mode = els.mode.value;
@@ -243,6 +313,7 @@
     var target = state.page + delta;
     if (target < 1 || target > totalPages) return;
     state.page = target;
+    focusResultsAfterLoad = true;
     loadInternships();
   }
 
@@ -272,6 +343,7 @@
     els.applyProgress.textContent = '';
     els.applyError.textContent = '';
     els.applySuccess.textContent = '';
+    els.confirmRef.textContent = '';
   }
 
   function updateLetterCount() {
@@ -279,6 +351,7 @@
   }
 
   function fillDetails(item) {
+    currentInternshipTitle = item.title;
     els.dialogTitle.textContent = item.title;
     els.detailDomain.textContent = item.domain;
     els.detailMode.textContent = item.mode;
@@ -291,6 +364,7 @@
     var open = item.openings > 0;
     els.noOpenings.hidden = open;
     els.applyForm.hidden = !open;
+    els.confirmation.hidden = true;
   }
 
   function loadDetails() {
@@ -317,7 +391,9 @@
     els.applyForm.reset();
     updateLetterCount();
     clearApplyMessages();
+    els.confirmation.hidden = true;
     if (!els.dialog.open) els.dialog.showModal(); // modal <dialog>: traps focus, Esc closes it
+    document.body.classList.add('dialog-open');
     loadDetails();
   }
 
@@ -374,6 +450,14 @@
     return error.message;
   }
 
+  function showConfirmation(applicationId) {
+    els.applyForm.hidden = true;
+    els.applySuccess.textContent = 'Thank you for applying for ' + currentInternshipTitle + '. Your application was submitted.';
+    els.confirmRef.textContent = applicationId ? 'Reference number: ' + applicationId : '';
+    els.confirmation.hidden = false;
+    els.confirmation.focus(); // screen readers announce the group name, "Application received"
+  }
+
   var submitting = false;
 
   function submitApplication(event) {
@@ -410,12 +494,11 @@
         cover_letter: values.letter
       })
     }).then(
-      function () {
+      function (payload) {
         els.applyProgress.textContent = '';
-        els.applyForm.reset();
+        els.applyForm.reset(); // personal details are not kept on the page after a successful submit
         updateLetterCount();
-        els.applySuccess.textContent = 'Application submitted. Thank you for applying.';
-        els.applySuccess.focus();
+        showConfirmation(payload.data && payload.data.application_id);
       },
       function (error) {
         els.applyProgress.textContent = '';
@@ -435,7 +518,20 @@
 
   // ---------- Wire up events ----------
 
+  els.navToggle.addEventListener('click', function () { setMenu(!els.nav.classList.contains('is-open')); });
+  els.nav.addEventListener('click', function (event) { if (event.target.closest && event.target.closest('a')) setMenu(false); });
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape' && els.nav.classList.contains('is-open') && !els.dialog.open) {
+      setMenu(false);
+      els.navToggle.focus();
+    }
+  });
+
   els.form.addEventListener('submit', function (event) { event.preventDefault(); applyFilters(); });
+  els.search.addEventListener('input', function () {
+    window.clearTimeout(searchTimer);
+    searchTimer = window.setTimeout(applyFilters, SEARCH_DELAY_MS);
+  });
   els.domain.addEventListener('change', applyFilters);
   els.mode.addEventListener('change', applyFilters);
   els.clear.addEventListener('click', clearFilters);
@@ -445,6 +541,7 @@
   els.next.addEventListener('click', function () { changePage(1, els.next); });
 
   els.dialogClose.addEventListener('click', closeDialog);
+  els.confirmClose.addEventListener('click', closeDialog);
   els.dialogRetry.addEventListener('click', loadDetails);
   els.applyForm.addEventListener('submit', submitApplication);
   els.letterInput.addEventListener('input', updateLetterCount);
@@ -453,9 +550,11 @@
   // Return keyboard focus to the "View details" button that opened the dialog.
   els.dialog.addEventListener('close', function () {
     currentInternshipId = null;
+    document.body.classList.remove('dialog-open');
     if (lastTrigger && document.contains(lastTrigger)) lastTrigger.focus();
   });
 
+  readUrlState();
   loadDomainOptions();
   loadInternships();
 })();

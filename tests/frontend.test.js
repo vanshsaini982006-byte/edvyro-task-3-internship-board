@@ -44,8 +44,8 @@ async function waitFor(check, message, timeout = 3000) {
 }
 
 // Opens the page like a browser would. `net` records every API call and lets a test break the network.
-async function openPage(serverUrl = baseUrl) {
-  const dom = new JSDOM(html, { url: `${serverUrl}/`, runScripts: 'outside-only', pretendToBeVisual: true });
+async function openPage(serverUrl = baseUrl, pagePath = '/') {
+  const dom = new JSDOM(html, { url: `${serverUrl}${pagePath}`, runScripts: 'outside-only', pretendToBeVisual: true });
   const { window } = dom;
   windows.push(window);
 
@@ -57,12 +57,23 @@ async function openPage(serverUrl = baseUrl) {
     this.dispatchEvent(new window.Event('close'));
   };
 
+  window.HTMLElement.prototype.scrollIntoView = function () {}; // not implemented by jsdom (real browsers have it)
+
   const net = { calls: [], offline: false, gate: null };
   window.fetch = async (url, options = {}) => {
-    net.calls.push({ method: options.method || 'GET', url: String(url) });
+    const { signal, ...rest } = options; // jsdom's AbortSignal is not Node's, so honour it here instead
+    net.calls.push({ method: rest.method || 'GET', url: String(url), signal });
     if (net.gate) await net.gate;
     if (net.offline) throw new TypeError('Failed to fetch');
-    return fetch(new URL(url, serverUrl), options);
+    const pending = fetch(new URL(url, serverUrl), rest);
+    if (!signal) return pending;
+    return Promise.race([
+      pending,
+      new Promise((resolve, reject) => {
+        const abort = () => reject(Object.assign(new Error('aborted'), { name: 'AbortError' }));
+        if (signal.aborted) abort(); else signal.addEventListener('abort', abort);
+      }),
+    ]);
   };
 
   const config = await (await fetch(`${serverUrl}/config.js`)).text(); // the real config.js from the server
@@ -129,6 +140,8 @@ describe('Internship list uses the real API', () => {
     await waitFor(() => page.$('domain').options.length > 1, 'domain options');
     const options = [...page.$('domain').options].map((o) => o.textContent);
     assert.deepEqual(options, ['All domains', 'Cyber Security', 'Data Analytics', 'Full Stack Development', 'UI/UX']);
+    assert.ok(page.net.calls.some((c) => c.url === '/api/domains'));
+    assert.ok(!page.net.calls.some((c) => c.url.includes('limit=100')), 'no need to download every internship for the filter list');
   });
 
   test('search and filters send the right API request and show the matching cards', async () => {
@@ -229,11 +242,15 @@ describe('Application form', () => {
     assert.equal(page.$('apply-submit').disabled, true, 'button is disabled while submitting');
     assert.equal(page.$('apply-progress').textContent, 'Submitting your application…');
 
-    await waitFor(() => page.$('apply-success').textContent !== '', 'success message');
-    assert.match(page.$('apply-success').textContent, /Application submitted/);
+    await waitFor(() => !page.$('apply-confirmation').hidden, 'confirmation panel');
+    assert.match(page.$('apply-success').textContent, /Thank you for applying for Frontend Intern/);
+    assert.match(page.$('confirm-ref').textContent, /^Reference number: \d+$/);
+    assert.equal(page.$('apply-form').hidden, true, 'the form is replaced by the confirmation');
+    assert.equal(page.$('apply-confirmation').getAttribute('role'), 'group');
     assert.equal(page.$('apply-submit').disabled, false);
-    assert.equal(page.$('applicant-email').value, '', 'form is cleared after success');
-    assert.equal(page.document.activeElement, page.$('apply-success'), 'focus moves to the confirmation');
+    assert.equal(page.$('applicant-email').value, '', 'personal details are cleared after success');
+    assert.equal(page.document.activeElement, page.$('apply-confirmation'), 'focus moves to the confirmation');
+    assert.ok(!page.$('apply-confirmation').textContent.includes('fe-ok@example.com'), 'the email is not shown again');
 
     const body = JSON.parse(await (await fetch(`${baseUrl}/api/internships/INT-101`)).text());
     assert.equal(body.status, 'success');
@@ -256,7 +273,7 @@ describe('Application form', () => {
     assert.equal(posts(page).length - before, 1);
     page.net.gate = null;
     release();
-    await waitFor(() => page.$('apply-success').textContent !== '', 'success');
+    await waitFor(() => !page.$('apply-confirmation').hidden, 'success');
     assert.equal(posts(page).length - before, 1);
   });
 
@@ -297,7 +314,7 @@ describe('Application form', () => {
 
     page.net.offline = false;
     submit(page);
-    await waitFor(() => page.$('apply-success').textContent !== '', 'success after retry');
+    await waitFor(() => !page.$('apply-confirmation').hidden, 'success after retry');
   });
 
   test('a server failure shows a generic message with no internal details', async () => {
@@ -324,10 +341,12 @@ describe('Application form', () => {
     await openApplyForm(page);
     fillForm(page, { name: 'Rate One', email: 'fe-rate1@example.com', resume: 'https://example.com/r.pdf' });
     submit(page);
-    await waitFor(() => page.$('apply-success').textContent !== '', 'first submission');
+    await waitFor(() => !page.$('apply-confirmation').hidden, 'first submission');
 
+    // Open the next internship's form and try again from the same connection.
+    page.$('confirm-close').click();
+    await openApplyForm(page, 'View details for API Engineering Intern');
     fillForm(page, { name: 'Rate Two', email: 'fe-rate2@example.com', resume: 'https://example.com/r.pdf' });
-    page.$('apply-success').textContent = '';
     submit(page);
     await waitFor(() => page.$('apply-error').textContent !== '', 'rate limit message');
     assert.match(page.$('apply-error').textContent, /Too many applications/);
@@ -352,5 +371,165 @@ describe('Application form', () => {
     page.net.offline = false;
     page.$('dialog-retry').click();
     await waitFor(() => !page.$('dialog-content').hidden, 'details after retry');
+  });
+});
+
+describe('Task 4: landing page, navigation and search behaviour', () => {
+  test('the loading state shows placeholder cards (so the page does not jump) plus a text message', async () => {
+    const page = await openPage();
+    assert.equal(page.$('state-loading').hidden, false);
+    assert.equal(page.document.querySelectorAll('#state-loading .skeleton').length, 3);
+    assert.equal(page.document.querySelector('#state-loading ul').getAttribute('aria-hidden'), 'true');
+    assert.match(page.$('state-loading').textContent, /Loading internships/);
+  });
+
+  test('cards show the work mode as text in a labelled pill, and closed roles are marked', async () => {
+    const page = await openPage();
+    await waitFor(() => cards(page).length === 5, 'cards');
+    const pill = cards(page)[1].querySelector('.pill');
+    assert.equal(pill.textContent, 'Hybrid');
+    assert.ok(pill.classList.contains('pill-hybrid'));
+    assert.ok(cards(page)[3].querySelector('.pill').classList.contains('pill-on-site'));
+  });
+
+  test('the mobile menu toggles with aria-expanded, closes with Escape and returns focus to the button', async () => {
+    const page = await openPage();
+    const toggle = page.$('nav-toggle');
+    const nav = page.$('site-nav');
+    assert.equal(toggle.getAttribute('aria-expanded'), 'false');
+    assert.equal(toggle.getAttribute('aria-controls'), 'site-nav');
+
+    toggle.click();
+    assert.equal(toggle.getAttribute('aria-expanded'), 'true');
+    assert.ok(nav.classList.contains('is-open'));
+    assert.equal(toggle.textContent, 'Close menu');
+
+    page.document.dispatchEvent(new page.window.KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    assert.equal(toggle.getAttribute('aria-expanded'), 'false');
+    assert.ok(!nav.classList.contains('is-open'));
+    assert.equal(page.document.activeElement, toggle);
+
+    toggle.click();
+    nav.querySelector('a').click();
+    assert.equal(toggle.getAttribute('aria-expanded'), 'false', 'choosing a link closes the menu');
+  });
+
+  test('typing searches automatically after a pause: one request, not one per keystroke', async () => {
+    const page = await openPage();
+    await waitFor(() => cards(page).length === 5, 'cards');
+    const before = page.net.calls.length;
+    for (const text of ['s', 'sq', 'sql']) {
+      page.$('search').value = text;
+      page.$('search').dispatchEvent(new page.window.Event('input', { bubbles: true }));
+      await wait(40);
+    }
+    assert.equal(page.net.calls.length, before, 'nothing is sent while the person is still typing');
+    await waitFor(() => cards(page).length === 2, 'results for "sql"');
+    const listCalls = page.net.calls.slice(before).filter((c) => c.url.startsWith('/api/internships?'));
+    assert.equal(listCalls.length, 1);
+    assert.ok(listCalls[0].url.includes('search=sql'));
+  });
+
+  test('a newer search cancels the older request that is still waiting, and only the newest result is shown', async () => {
+    const page = await openPage();
+    await waitFor(() => cards(page).length === 5, 'cards');
+    let release;
+    page.net.gate = new Promise((resolve) => { release = resolve; });
+    page.$('search').value = 'frontend';
+    page.$('filter-form').dispatchEvent(new page.window.Event('submit', { cancelable: true }));
+    const slow = page.net.calls[page.net.calls.length - 1];
+    page.net.gate = null;
+    page.$('search').value = 'figma';
+    page.$('filter-form').dispatchEvent(new page.window.Event('submit', { cancelable: true }));
+    assert.equal(slow.signal.aborted, true, 'the older request must be cancelled');
+    release();
+    await waitFor(() => cardTitles(page).join() === 'UI/UX Intern', 'only the newest results');
+    assert.ok(page.$('state-error').hidden, 'a cancelled request is not an error');
+  });
+
+  test('the page address keeps search, filters and page so a view can be shared or reloaded', async () => {
+    const page = await openPage(baseUrl, '/?search=sql&mode=Hybrid&domain=Full%20Stack%20Development');
+    await waitFor(() => cards(page).length === 1, 'filtered cards from the address');
+    assert.equal(page.$('search').value, 'sql');
+    assert.equal(page.$('mode').value, 'Hybrid');
+    await waitFor(() => page.$('domain').value === 'Full Stack Development', 'domain restored');
+    const first = page.net.calls.find((c) => c.url.startsWith('/api/internships?'));
+    assert.ok(first.url.includes('search=sql') && first.url.includes('mode=Hybrid') && first.url.includes('domain=Full+Stack+Development'), first.url);
+
+    page.$('mode').value = '';
+    page.$('mode').dispatchEvent(new page.window.Event('change'));
+    await waitFor(() => !page.window.location.search.includes('mode='), 'address updated');
+    assert.ok(page.window.location.search.includes('search=sql'));
+
+    page.$('clear-filters').click();
+    await waitFor(() => page.window.location.search === '', 'address cleared');
+  });
+
+  test('unsafe values in the page address are ignored', async () => {
+    const page = await openPage(baseUrl, '/?mode=%3Cscript%3E&page=-4&search=%3Cimg%20src%3Dx%3E');
+    await waitFor(() => !page.$('state-loading').hidden === false || page.$('state-empty').hidden === false || cards(page).length >= 0, 'settled');
+    await wait(150);
+    const first = page.net.calls.find((c) => c.url.startsWith('/api/internships?'));
+    assert.ok(!first.url.includes('mode='), first.url);
+    assert.ok(first.url.includes('page=1'));
+    assert.equal(page.document.querySelectorAll('img').length, 0, 'search text is never rendered as HTML');
+  });
+
+  test('moving to the next page loads it, updates the address and moves focus to the results', async () => {
+    for (let i = 1; i <= 3; i++) {
+      const res = await fetch(`${baseUrl}/api/internships`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: `INT-PG${i}`, title: `Paging Role ${i}`, domain: 'Testing', mode: 'Remote', location: 'India', skills: ['Paging'], openings: 1 }),
+      });
+      assert.equal(res.status, 201);
+    }
+    try {
+      const page = await openPage();
+      await waitFor(() => cards(page).length === 6, 'first page of six');
+      assert.match(page.$('page-status').textContent, /Page 1 of 2/);
+      page.$('page-next').click();
+      await waitFor(() => /Page 2 of 2/.test(page.$('page-status').textContent) && cards(page).length === 2, 'second page');
+      assert.equal(page.$('result-summary').textContent, 'Showing 7–8 of 8 internships');
+      assert.ok(page.window.location.search.includes('page=2'));
+      assert.equal(page.document.activeElement, page.$('results'));
+      assert.equal(page.$('page-next').getAttribute('aria-disabled'), 'true');
+    } finally {
+      for (let i = 1; i <= 3; i++) await fetch(`${baseUrl}/api/internships/INT-PG${i}`, { method: 'DELETE' });
+    }
+  });
+
+  test('a role with no openings shows a notice instead of the form', async () => {
+    await fetch(`${baseUrl}/api/internships`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: 'INT-ZERO', title: 'Closed Role', domain: 'Testing', mode: 'Remote', location: 'India', skills: ['None'], openings: 0 }),
+    });
+    try {
+      const page = await openPage();
+      await openApplyForm(page, 'View details for Closed Role');
+      assert.equal(page.$('no-openings').hidden, false);
+      assert.equal(page.$('apply-form').hidden, true);
+    } finally {
+      await fetch(`${baseUrl}/api/internships/INT-ZERO`, { method: 'DELETE' });
+    }
+  });
+
+  test('after a successful application, Back to internships closes the dialog, returns focus, and the next dialog starts with a fresh form', async () => {
+    const page = await openPage();
+    await openApplyForm(page);
+    fillForm(page, { name: 'Confirm Closer', email: 'fe-confirm@example.com', resume: 'https://example.com/c.pdf' });
+    submit(page);
+    await waitFor(() => !page.$('apply-confirmation').hidden, 'confirmation');
+    const trigger = [...page.document.querySelectorAll('#card-list button')][0];
+    page.$('confirm-close').click();
+    assert.equal(page.$('details-dialog').hasAttribute('open'), false);
+    assert.equal(page.document.activeElement, trigger);
+    assert.equal(page.document.body.classList.contains('dialog-open'), false, 'page scrolling is unlocked again');
+
+    await openApplyForm(page, 'View details for UI/UX Intern');
+    assert.equal(page.$('apply-form').hidden, false);
+    assert.equal(page.$('apply-confirmation').hidden, true);
+    assert.equal(page.$('apply-success').textContent, '');
+    assert.equal(page.$('applicant-name').value, '');
+    assert.equal(page.document.body.classList.contains('dialog-open'), true);
   });
 });

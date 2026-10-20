@@ -3,79 +3,130 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Internship Board</title>
-  <meta name="description" content="Browse open internships, filter by domain and work mode, and apply.">
+  <title>Internship Board – find and apply for tech internships</title>
+  <meta name="description" content="Browse open tech internships, search by title, skill or city, filter by domain and work mode, and apply in a few minutes. No account needed.">
+  <meta name="theme-color" content="#0a3f33">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <a class="skip-link" href="#results">Skip to internships</a>
+  <a class="skip-link" href="#internships">Skip to internships</a>
 
   <header class="site-header">
-    <div class="wrap">
-      <h1>Internship Board</h1>
-      <p>Find an internship by title, skill or city, narrow it down by domain and work mode, then apply.</p>
+    <div class="wrap nav-bar">
+      <a class="brand" href="#top" aria-label="Internship Board, back to top">
+        <svg class="brand-mark" viewBox="0 0 64 64" width="28" height="28" aria-hidden="true" focusable="false"><rect width="64" height="64" rx="12" fill="#0a3f33"/><path d="M18 22h28v6H18zM18 32h28v6H18zM18 42h18v6H18z" fill="#ffffff"/></svg>
+        <span>Internship Board</span>
+      </a>
+      <button type="button" id="nav-toggle" class="btn nav-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
+      <nav id="site-nav" class="site-nav" aria-label="Main">
+        <ul>
+          <li><a href="#internships">Internships</a></li>
+          <li><a href="#how-it-works">How it works</a></li>
+          <li><a href="#about">About</a></li>
+        </ul>
+      </nav>
     </div>
   </header>
 
-  <main class="wrap">
-    <form id="filter-form" class="filters" role="search" aria-label="Search and filter internships">
-      <div class="field field-search">
-        <label for="search">Search</label>
-        <input id="search" name="search" type="search" placeholder="Title, skill or city" autocomplete="off">
+  <main id="top">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="wrap hero-inner">
+        <p class="eyebrow">Internships for students and freshers</p>
+        <h1 id="hero-title">Find an internship that fits your skills</h1>
+        <p class="hero-text">Search open roles by title, skill or city, narrow them down by domain and work mode, then apply in a few minutes. No account needed.</p>
+        <p class="hero-actions">
+          <a class="btn btn-light" href="#internships">Browse internships</a>
+          <a class="btn btn-outline-light" href="#how-it-works">How applying works</a>
+        </p>
       </div>
-      <div class="field">
-        <label for="domain">Domain</label>
-        <select id="domain" name="domain">
-          <option value="">All domains</option>
-        </select>
-      </div>
-      <div class="field">
-        <label for="mode">Work mode</label>
-        <select id="mode" name="mode">
-          <option value="">All work modes</option>
-          <option value="Remote">Remote</option>
-          <option value="Hybrid">Hybrid</option>
-          <option value="On-site">On-site</option>
-        </select>
-      </div>
-      <div class="actions">
-        <button type="submit" class="btn btn-primary">Search</button>
-        <button type="button" id="clear-filters" class="btn">Clear</button>
-      </div>
-    </form>
+    </section>
 
-    <section id="results" aria-labelledby="results-heading" tabindex="-1">
-      <h2 id="results-heading">Internships</h2>
-      <p id="result-summary" class="summary" role="status" aria-live="polite"></p>
+    <section id="internships" class="wrap section" aria-labelledby="results-heading">
+      <h2 id="results-heading">Open internships</h2>
 
-      <div id="state-loading" class="state" hidden>
-        <span class="spinner" aria-hidden="true"></span>
-        <p>Loading internships…</p>
+      <form id="filter-form" class="filters" role="search" aria-label="Search and filter internships">
+        <div class="field field-search">
+          <label for="search">Search</label>
+          <input id="search" name="search" type="search" placeholder="Title, skill or city" autocomplete="off" maxlength="100">
+        </div>
+        <div class="field">
+          <label for="domain">Domain</label>
+          <select id="domain" name="domain">
+            <option value="">All domains</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="mode">Work mode</label>
+          <select id="mode" name="mode">
+            <option value="">All work modes</option>
+            <option value="Remote">Remote</option>
+            <option value="Hybrid">Hybrid</option>
+            <option value="On-site">On-site</option>
+          </select>
+        </div>
+        <div class="actions">
+          <button type="submit" class="btn btn-primary">Search</button>
+          <button type="button" id="clear-filters" class="btn">Clear</button>
+        </div>
+      </form>
+
+      <div id="results" class="results" tabindex="-1">
+        <p id="result-summary" class="summary" role="status" aria-live="polite"></p>
+
+        <div id="state-loading" class="state-loading" hidden>
+          <p class="loading-line"><span class="spinner" aria-hidden="true"></span> Loading internships…</p>
+          <ul class="cards" aria-hidden="true">
+            <li class="card skeleton"><span class="sk sk-line sk-short"></span><span class="sk sk-title"></span><span class="sk sk-line"></span><span class="sk sk-line sk-short"></span><span class="sk sk-button"></span></li>
+            <li class="card skeleton"><span class="sk sk-line sk-short"></span><span class="sk sk-title"></span><span class="sk sk-line"></span><span class="sk sk-line sk-short"></span><span class="sk sk-button"></span></li>
+            <li class="card skeleton"><span class="sk sk-line sk-short"></span><span class="sk sk-title"></span><span class="sk sk-line"></span><span class="sk sk-line sk-short"></span><span class="sk sk-button"></span></li>
+          </ul>
+        </div>
+
+        <div id="state-error" class="state state-error" role="alert" hidden>
+          <h3>We couldn’t load the internships</h3>
+          <p id="state-error-text"></p>
+          <button type="button" id="retry-list" class="btn btn-primary">Try again</button>
+        </div>
+
+        <div id="state-empty" class="state" hidden>
+          <h3>No internships found</h3>
+          <p>No internships match your search. Try a different word, or remove a filter.</p>
+          <button type="button" id="empty-clear" class="btn">Clear search and filters</button>
+        </div>
+
+        <ul id="card-list" class="cards" hidden></ul>
+
+        <nav id="pagination" class="pagination" aria-label="Pagination" hidden>
+          <button type="button" id="page-prev" class="btn">Previous</button>
+          <span id="page-status" class="page-status"></span>
+          <button type="button" id="page-next" class="btn">Next</button>
+        </nav>
       </div>
+    </section>
 
-      <div id="state-error" class="state state-error" role="alert" hidden>
-        <p id="state-error-text"></p>
-        <button type="button" id="retry-list" class="btn btn-primary">Try again</button>
+    <section id="how-it-works" class="section section-alt" aria-labelledby="how-heading">
+      <div class="wrap">
+        <h2 id="how-heading">How it works</h2>
+        <ol class="steps">
+          <li><h3>Find a role</h3><p>Search by title, skill or city, and filter by domain and work mode.</p></li>
+          <li><h3>Check the details</h3><p>Open an internship to see its skills, location and number of openings.</p></li>
+          <li><h3>Apply in minutes</h3><p>Send your name, email and a link to your resume. A cover letter is optional.</p></li>
+        </ol>
       </div>
+    </section>
 
-      <div id="state-empty" class="state" hidden>
-        <p>No internships match your search. Try a different word, or remove a filter.</p>
-        <button type="button" id="empty-clear" class="btn">Clear search and filters</button>
-      </div>
-
-      <ul id="card-list" class="cards" hidden></ul>
-
-      <nav id="pagination" class="pagination" aria-label="Pagination" hidden>
-        <button type="button" id="page-prev" class="btn">Previous</button>
-        <span id="page-status" class="page-status"></span>
-        <button type="button" id="page-next" class="btn">Next</button>
-      </nav>
+    <section id="about" class="wrap section" aria-labelledby="about-heading">
+      <h2 id="about-heading">About this project</h2>
+      <p class="about-text">Internship Board is a full-stack portfolio project built for the EdVyro Full Stack Development course: a Node.js and Express REST API, a SQLite database and a plain HTML, CSS and JavaScript front end. It is a demonstration, so the listings are sample data and it is not a real recruitment service.</p>
+      <p class="about-text">Applications are stored in a demo database that can be reset whenever the server restarts or is redeployed.</p>
     </section>
   </main>
 
   <footer class="site-footer">
-    <div class="wrap">
-      <p>Data comes from the REST API at <code>/api/internships</code>.</p>
+    <div class="wrap footer-inner">
+      <p>© Internship Board demo. Data is served by the REST API at <code>/api/internships</code>.</p>
+      <p><a href="#top">Back to top</a></p>
     </div>
   </footer>
 
@@ -83,12 +134,11 @@
     <div class="dialog-inner">
       <div class="dialog-head">
         <h2 id="dialog-title">Internship details</h2>
-        <button type="button" id="dialog-close" class="btn">Close</button>
+        <button type="button" id="dialog-close" class="btn" aria-label="Close details">Close</button>
       </div>
 
       <div id="dialog-loading" class="state" hidden>
-        <span class="spinner" aria-hidden="true"></span>
-        <p>Loading details…</p>
+        <p class="loading-line"><span class="spinner" aria-hidden="true"></span> Loading details…</p>
       </div>
 
       <div id="dialog-error" class="state state-error" role="alert" hidden>
@@ -108,7 +158,7 @@
         <ul id="detail-skills" class="chips" aria-labelledby="skills-heading"></ul>
 
         <h3 id="apply-heading">Apply for this internship</h3>
-        <p id="no-openings" hidden>This internship has no open positions right now.</p>
+        <p id="no-openings" class="notice" hidden>This internship has no open positions right now.</p>
 
         <form id="apply-form" novalidate aria-labelledby="apply-heading">
           <p id="apply-target" class="apply-target"></p>
@@ -137,9 +187,16 @@
           </div>
           <p id="apply-progress" class="form-message form-message-info" role="status"></p>
           <p id="apply-error" class="form-message form-message-error" role="alert"></p>
-          <p id="apply-success" class="form-message form-message-success" role="status" tabindex="-1"></p>
           <button type="submit" id="apply-submit" class="btn btn-primary">Submit application</button>
         </form>
+
+        <div id="apply-confirmation" class="confirmation" role="group" aria-labelledby="confirm-title" tabindex="-1" hidden>
+          <h3 id="confirm-title">Application received</h3>
+          <p id="apply-success" class="form-message form-message-success" role="status"></p>
+          <p id="confirm-ref" class="confirm-ref"></p>
+          <p>We have saved your application. Applying again with the same email address for this internship is not possible, but you can apply for other internships.</p>
+          <button type="button" id="confirm-close" class="btn btn-primary">Back to internships</button>
+        </div>
       </div>
     </div>
   </dialog>

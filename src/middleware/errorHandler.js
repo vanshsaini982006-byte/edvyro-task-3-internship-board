@@ -1,6 +1,9 @@
 'use strict';
 
 const { sendError, ApiError } = require('../utils/response');
+const { loggerFromEnv, clean } = require('../utils/logger');
+
+const fallbackLogger = loggerFromEnv();
 
 // Any request that did not match a route.
 function notFoundHandler(req, res) {
@@ -32,8 +35,17 @@ function errorHandler(err, req, res, next) {
   }
 
   // Anything else is a bug or a database problem: log it for the developer, hide it from the user.
-  // Only the stack text is logged - never the request body or the error object itself.
-  console.error('Unexpected error:', err && err.stack ? err.stack : String(err));
+  // Only the error name, message and a short stack are logged - never the request body or the error object itself.
+  const logger = (req.app && req.app.locals.logger) || fallbackLogger;
+  logger.error('unhandled error', {
+    requestId: req.id,
+    method: req.method,
+    path: clean(req.originalUrl.split('?')[0]),
+    errorName: err && err.name ? clean(err.name, 80) : 'UnknownError',
+    errorCode: err && err.code ? clean(err.code, 80) : undefined,
+    message: clean(err && err.message ? err.message : String(err), 300),
+    stack: err && err.stack ? clean(String(err.stack).split('\n').slice(0, 6).join(' | '), 1200) : undefined,
+  });
   return sendError(res, 500, 'INTERNAL_SERVER_ERROR', 'An unexpected error occurred');
 }
 

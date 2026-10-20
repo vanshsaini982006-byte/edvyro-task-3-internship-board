@@ -1,0 +1,46 @@
+{
+  "generatedAt": "2026-10-19T10:08:20.189Z",
+  "baseUrl": "http://127.0.0.1:3300",
+  "browser": "HeadlessChrome/153.0.8010.0",
+  "layout": {
+    "320": {
+      "viewportWidth": 320,
+      "documentScrollWidth": 320,
+      "bodyScrollWidth": 320,
+      "horizontalOverflow": false,
+      "elementsOutsideViewport": [],
+      "belowMinimumTapSize": [],
+      "navVisible": false,
+      "menuButtonVisible": true,
+      "smallestFontPx": 13.6,
+      "cardCount": 5,
+      "cardColumns": 1
+    }
+  },
+  "dialog": {
+    "320": {
+      "open": {
+        "dialogLeft": 8,
+        "dialogRight": 312,
+        "viewport": 320,
+        "dialogHeight": 724,
+        "viewportHeight": 740,
+        "innerHorizontalOverflow": false,
+        "pageHorizontalOverflow": false,
+        "scrollsInside": true,
+        "bodyScrollLocked": true
+      },
+      "withErrors": {
+        "dialogLeft": 8,
+        "dialogRight": 312,
+        "viewport": 320,
+        "dialogHeight": 724,
+        "viewportHeight": 740,
+        "innerHorizontalOverflow": false,
+        "pageHorizontalOverflow": false,
+        "scrollsInside": true,
+        "bodyScrollLocked": true
+      }
+    }
+  }
+}

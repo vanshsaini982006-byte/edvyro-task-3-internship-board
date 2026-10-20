@@ -79,7 +79,13 @@ describe('Health and routing', () => {
   test('GET /api/health returns 200 with the success envelope', async () => {
     const res = await api('GET', '/api/health');
     assert.equal(res.status, 200);
-    assert.deepEqual(res.body, { status: 'success', data: { message: 'Internship API is running' } });
+    // Task 4 added database / uptime / version to `data`; the original envelope and message are unchanged.
+    assert.equal(res.body.status, 'success');
+    assert.equal(res.body.data.message, 'Internship API is running');
+    assert.equal(res.body.data.database, 'ok');
+    assert.equal(typeof res.body.data.uptime_seconds, 'number');
+    assert.equal(typeof res.body.data.version, 'string');
+    assert.equal('pagination' in res.body, false);
   });
 
   test('unknown API route returns 404 ROUTE_NOT_FOUND', async () => {

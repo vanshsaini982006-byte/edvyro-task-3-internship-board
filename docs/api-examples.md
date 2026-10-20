@@ -191,3 +191,33 @@ curl.exe -s -X POST http://localhost:3000/api/applications -H "Content-Type: app
   }
 }
 ```
+
+---
+
+## Task 4 additions
+
+### `GET /api/health`
+
+```powershell
+curl.exe -s http://localhost:3000/api/health
+```
+
+```json
+{ "status": "success", "data": { "message": "Internship API is running", "database": "ok", "uptime_seconds": 12, "version": "1.0.0" } }
+```
+
+If the database cannot be reached the response is `503` with `{ "status": "error", "error": { "code": "SERVICE_UNAVAILABLE", "message": "Service temporarily unavailable" } }`. This endpoint is not counted by the rate limiter.
+
+### `GET /api/domains`
+
+```powershell
+curl.exe -s http://localhost:3000/api/domains
+```
+
+```json
+{ "status": "success", "data": ["Cyber Security", "Data Analytics", "Full Stack Development", "UI/UX"] }
+```
+
+### Request IDs and caching
+
+Every response has an `X-Request-Id` header. You may send your own (letters, numbers, `.`, `_`, `-`, up to 64 characters); anything else is replaced. `GET` responses carry an `ETag` and `Cache-Control: no-cache`, so a repeat request with `If-None-Match` returns `304` with no body. Application responses are `Cache-Control: no-store`.

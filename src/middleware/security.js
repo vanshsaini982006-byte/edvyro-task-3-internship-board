@@ -34,6 +34,13 @@ function securityHeaders(config) {
   });
 }
 
+// Tells the browser this site never needs the camera, microphone, location and similar features,
+// so injected or embedded code could not use them either.
+function permissionsPolicy(req, res, next) {
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()');
+  next();
+}
+
 // CORS: with no CORS_ORIGIN set, no cross-origin access is granted at all.
 function corsPolicy(config) {
   if (config.corsOrigins.length === 0) return (req, res, next) => next();
@@ -77,4 +84,4 @@ function requireJsonBody(req, res, next) {
   next();
 }
 
-module.exports = { securityHeaders, corsPolicy, apiLimiter, applicationLimiter, requireJsonBody };
+module.exports = { permissionsPolicy, securityHeaders, corsPolicy, apiLimiter, applicationLimiter, requireJsonBody };

@@ -1,0 +1,17 @@
+{
+  "name": "internship-board-audit",
+  "private": true,
+  "type": "module",
+  "description": "Real-browser audit tools (Lighthouse, axe-core, layout and keyboard checks). Kept separate so they are NOT dependencies of the app.",
+  "scripts": {
+    "audit": "node run.mjs"
+  },
+  "dependencies": {
+    "axe-core": "^4.14.0",
+    "lighthouse": "^13.5.0",
+    "puppeteer-core": "^25.14.0"
+  },
+  "optionalDependencies": {
+    "@sparticuz/chromium": "^153.0.0"
+  }
+}

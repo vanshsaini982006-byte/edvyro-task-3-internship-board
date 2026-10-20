@@ -1,0 +1,817 @@
+{
+  "generatedAt": "2026-10-19T09:50:27.574Z",
+  "baseUrl": "http://127.0.0.1:3300",
+  "browser": "HeadlessChrome/153.0.8010.0",
+  "layout": {
+    "360": {
+      "viewportWidth": 360,
+      "documentScrollWidth": 360,
+      "bodyScrollWidth": 360,
+      "horizontalOverflow": false,
+      "elementsOutsideViewport": [],
+      "belowMinimumTapSize": [],
+      "navVisible": false,
+      "menuButtonVisible": true,
+      "smallestFontPx": 13.6,
+      "cardCount": 5,
+      "cardColumns": 1
+    },
+    "375": {
+      "viewportWidth": 375,
+      "documentScrollWidth": 375,
+      "bodyScrollWidth": 375,
+      "horizontalOverflow": false,
+      "elementsOutsideViewport": [],
+      "belowMinimumTapSize": [],
+      "navVisible": false,
+      "menuButtonVisible": true,
+      "smallestFontPx": 13.6,
+      "cardCount": 5,
+      "cardColumns": 1
+    },
+    "768": {
+      "viewportWidth": 768,
+      "documentScrollWidth": 768,
+      "bodyScrollWidth": 768,
+      "horizontalOverflow": false,
+      "elementsOutsideViewport": [],
+      "belowMinimumTapSize": [],
+      "navVisible": true,
+      "menuButtonVisible": false,
+      "smallestFontPx": 13.6,
+      "cardCount": 5,
+      "cardColumns": 2
+    },
+    "1280": {
+      "viewportWidth": 1280,
+      "documentScrollWidth": 1280,
+      "bodyScrollWidth": 1280,
+      "horizontalOverflow": false,
+      "elementsOutsideViewport": [],
+      "belowMinimumTapSize": [],
+      "navVisible": true,
+      "menuButtonVisible": false,
+      "smallestFontPx": 13.6,
+      "cardCount": 5,
+      "cardColumns": 3
+    }
+  },
+  "dialog": {
+    "360": {
+      "open": {
+        "dialogLeft": 8,
+        "dialogRight": 352,
+        "viewport": 360,
+        "dialogHeight": 724,
+        "viewportHeight": 740,
+        "innerHorizontalOverflow": false,
+        "pageHorizontalOverflow": false,
+        "scrollsInside": true,
+        "bodyScrollLocked": true
+      },
+      "withErrors": {
+        "dialogLeft": 8,
+        "dialogRight": 352,
+        "viewport": 360,
+        "dialogHeight": 724,
+        "viewportHeight": 740,
+        "innerHorizontalOverflow": false,
+        "pageHorizontalOverflow": false,
+        "scrollsInside": true,
+        "bodyScrollLocked": true
+      }
+    },
+    "375": {
+      "open": {
+        "dialogLeft": 8,
+        "dialogRight": 367,
+        "viewport": 375,
+        "dialogHeight": 724,
+        "viewportHeight": 740,
+        "innerHorizontalOverflow": false,
+        "pageHorizontalOverflow": false,
+        "scrollsInside": true,
+        "bodyScrollLocked": true
+      },
+      "withErrors": {
+        "dialogLeft": 8,
+        "dialogRight": 367,
+        "viewport": 375,
+        "dialogHeight": 724,
+        "viewportHeight": 740,
+        "innerHorizontalOverflow": false,
+        "pageHorizontalOverflow": false,
+        "scrollsInside": true,
+        "bodyScrollLocked": true
+      }
+    },
+    "768": {
+      "open": {
+        "dialogLeft": 64,
+        "dialogRight": 704,
+        "viewport": 768,
+        "dialogHeight": 724,
+        "viewportHeight": 740,
+        "innerHorizontalOverflow": false,
+        "pageHorizontalOverflow": false,
+        "scrollsInside": true,
+        "bodyScrollLocked": true
+      },
+      "withErrors": {
+        "dialogLeft": 64,
+        "dialogRight": 704,
+        "viewport": 768,
+        "dialogHeight": 724,
+        "viewportHeight": 740,
+        "innerHorizontalOverflow": false,
+        "pageHorizontalOverflow": false,
+        "scrollsInside": true,
+        "bodyScrollLocked": true
+      }
+    }
+  },
+  "axe": [
+    {
+      "width": 360,
+      "state": "home",
+      "violations": [],
+      "passes": 45,
+      "incomplete": [],
+      "axeVersion": "4.14.0"
+    },
+    {
+      "width": 360,
+      "state": "dialog open",
+      "violations": [],
+      "passes": 29,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": 1
+        }
+      ],
+      "axeVersion": "4.14.0"
+    },
+    {
+      "width": 360,
+      "state": "dialog with validation errors",
+      "violations": [],
+      "passes": 32,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": 12
+        }
+      ],
+      "axeVersion": "4.14.0"
+    },
+    {
+      "width": 1280,
+      "state": "home",
+      "violations": [],
+      "passes": 45,
+      "incomplete": [],
+      "axeVersion": "4.14.0"
+    },
+    {
+      "width": 1280,
+      "state": "dialog open",
+      "violations": [],
+      "passes": 29,
+      "incomplete": [],
+      "axeVersion": "4.14.0"
+    },
+    {
+      "width": 1280,
+      "state": "dialog with validation errors",
+      "violations": [],
+      "passes": 32,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": 10
+        }
+      ],
+      "axeVersion": "4.14.0"
+    }
+  ],
+  "keyboard": {
+    "tabOrderFirst16": [
+      {
+        "tag": "a",
+        "label": "Skip to internships",
+        "outlineStyle": "solid",
+        "outlineWidth": 3,
+        "outlineColor": "rgb(31, 63, 191)",
+        "boxShadow": false
+      },
+      {
+        "tag": "a",
+        "label": "Internship Board, back to top",
+        "outlineStyle": "solid",
+        "outlineWidth": 3,
+        "outlineColor": "rgb(31, 63, 191)",
+        "boxShadow": false
+      },
+      {
+        "tag": "a",
+        "label": "Internships",
+        "outlineStyle": "solid",
+        "outlineWidth": 3,
+        "outlineColor": "rgb(31, 63, 191)",
+        "boxShadow": false
+      },
+      {
+        "tag": "a",
+        "label": "How it works",
+        "outlineStyle": "solid",
+        "outlineWidth": 3,
+        "outlineColor": "rgb(31, 63, 191)",
+        "boxShadow": false
+      },
+      {
+        "tag": "a",
+        "label": "About",
+        "outlineStyle": "solid",
+        "outlineWidth": 3,
+        "outlineColor": "rgb(31, 63, 191)",
+        "boxShadow": false
+      },
+      {
+        "tag": "a",
+        "label": "Browse internships",
+        "outlineStyle": "solid",
+        "outlineWidth": 3,
+        "outlineColor": "rgb(255, 255, 255)",
+        "boxShadow": false
+      },
+      {
+        "tag": "a",
+        "label": "How applying works",
+        "outlineStyle": "solid",
+        "outlineWidth": 3,
+        "outlineColor": "rgb(255, 255, 255)",
+        "boxShadow": false
+      },
+      {
+        "tag": "input",
+        "label": "search",
+        "outlineStyle": "solid",
+        "outlineWidth": 3,
+        "outlineColor": "rgb(31, 63, 191)",
+        "boxShadow": false
+      },
+      {
+        "tag": "select",
+        "label": "All domains\n          Cyber Se",
+        "outlineStyle": "solid",
+        "outlineWidth": 3,
+        "outlineColor": "rgb(31, 63, 191)",
+        "boxShadow": false
+      },
+      {
+        "tag": "select",
+        "label": "All work modes\n            Rem",
+        "outlineStyle": "solid",
+        "outlineWidth": 3,
+        "outlineColor": "rgb(31, 63, 191)",
+        "boxShadow": false
+      },
+      {
+        "tag": "button",
+        "label": "Search",
+        "outlineStyle": "solid",
+        "outlineWidth": 3,
+        "outlineColor": "rgb(31, 63, 191)",
+        "boxShadow": false
+      },
+      {
+        "tag": "button",
+        "label": "Clear",
+        "outlineStyle": "solid",
+        "outlineWidth": 3,
+        "outlineColor": "rgb(31, 63, 191)",
+        "boxShadow": false
+      },
+      {
+        "tag": "button",
+        "label": "View details for Frontend Intern",
+        "outlineStyle": "solid",
+        "outlineWidth": 3,
+        "outlineColor": "rgb(31, 63, 191)",
+        "boxShadow": false
+      },
+      {
+        "tag": "button",
+        "label": "View details for API Engineering Intern",
+        "outlineStyle": "solid",
+        "outlineWidth": 3,
+        "outlineColor": "rgb(31, 63, 191)",
+        "boxShadow": false
+      },
+      {
+        "tag": "button",
+        "label": "View details for UI/UX Intern",
+        "outlineStyle": "solid",
+        "outlineWidth": 3,
+        "outlineColor": "rgb(31, 63, 191)",
+        "boxShadow": false
+      },
+      {
+        "tag": "button",
+        "label": "View details for Data Analyst Intern",
+        "outlineStyle": "solid",
+        "outlineWidth": 3,
+        "outlineColor": "rgb(31, 63, 191)",
+        "boxShadow": false
+      }
+    ],
+    "focusVisibleOnAll": true,
+    "openedWithEnter": true,
+    "focusMovedIntoDialog": true,
+    "focusNeverReachedBackgroundIn24Tabs": true,
+    "tabsThatLeftTheDialogToBrowserUi": 3,
+    "focusedFirstInDialog": [
+      {
+        "tag": "input",
+        "label": "applicant-name",
+        "outlineStyle": "solid",
+        "outlineWidth": 3,
+        "outlineColor": "rgb(31, 63, 191)",
+        "boxShadow": false
+      },
+      {
+        "tag": "input",
+        "label": "applicant-email",
+        "outlineStyle": "solid",
+        "outlineWidth": 3,
+        "outlineColor": "rgb(31, 63, 191)",
+        "boxShadow": false
+      },
+      {
+        "tag": "input",
+        "label": "resume-url",
+        "outlineStyle": "solid",
+        "outlineWidth": 3,
+        "outlineColor": "rgb(31, 63, 191)",
+        "boxShadow": false
+      },
+      {
+        "tag": "textarea",
+        "label": "cover-letter",
+        "outlineStyle": "solid",
+        "outlineWidth": 3,
+        "outlineColor": "rgb(31, 63, 191)",
+        "boxShadow": false
+      },
+      {
+        "tag": "button",
+        "label": "Submit application",
+        "outlineStyle": "solid",
+        "outlineWidth": 3,
+        "outlineColor": "rgb(31, 63, 191)",
+        "boxShadow": false
+      },
+      {
+        "tag": "body",
+        "label": "Skip to internships\n\n  \n    \n ",
+        "outlineStyle": "none",
+        "outlineWidth": 3,
+        "outlineColor": "rgb(20, 32, 29)",
+        "boxShadow": false
+      },
+      {
+        "tag": "dialog",
+        "label": "Frontend Intern\n        Close\n",
+        "outlineStyle": "auto",
+        "outlineWidth": 1,
+        "outlineColor": "rgb(16, 16, 16)",
+        "boxShadow": false
+      },
+      {
+        "tag": "button",
+        "label": "Close details",
+        "outlineStyle": "solid",
+        "outlineWidth": 3,
+        "outlineColor": "rgb(31, 63, 191)",
+        "boxShadow": false
+      }
+    ],
+    "focusAfterInvalidSubmit": "applicant-name",
+    "nameAriaInvalid": "true",
+    "nameErrorText": "Enter your full name.",
+    "escapeClosedDialog": true,
+    "focusReturnedToTrigger": true,
+    "triggerLabel": "View details for Frontend Intern",
+    "typingSearchResult": "Showing 1–2 of 2 internships"
+  },
+  "journey": {
+    "log": [
+      [
+        "home loaded",
+        "5 cards"
+      ],
+      [
+        "search \"sql\" + Hybrid",
+        "API Engineering Intern"
+      ],
+      [
+        "empty state shown",
+        true
+      ],
+      [
+        "offline error then Retry recovered",
+        "Could not reach the server. Check that it is running, then try again."
+      ]
+    ],
+    "urlAfterFilter": "?search=sql&mode=Hybrid",
+    "unsafeUrlMessage": "The link must start with http:// or https://.",
+    "confirmationText": "Application received Thank you for applying for Frontend Intern. Your application was submitted. Reference number: 1 We have saved your application. Applying again with the same email address for this internship is not possible, but you can apply for other internships. Back to internships",
+    "focusOnConfirmation": "apply-confirmation",
+    "duplicateMessage": "You have already applied for this internship with this email address.",
+    "valuesKeptAfterDuplicate": "Audit Tester",
+    "headers": {
+      "status": 200,
+      "requestId": "b7dd2a6f-a6b9-4c34-ba2f-f40b986cc942",
+      "cacheControl": "no-cache"
+    }
+  },
+  "network": [
+    {
+      "label": "mobile viewport, cold cache",
+      "files": [
+        {
+          "url": "/",
+          "status": 200,
+          "encoding": "br",
+          "type": "Document",
+          "transferBytes": 4021
+        },
+        {
+          "url": "/styles.css",
+          "status": 200,
+          "encoding": "br",
+          "type": "Stylesheet",
+          "transferBytes": 4647
+        },
+        {
+          "url": "/config.js",
+          "status": 200,
+          "encoding": "none",
+          "type": "Script",
+          "transferBytes": 954
+        },
+        {
+          "url": "/app.js",
+          "status": 200,
+          "encoding": "br",
+          "type": "Script",
+          "transferBytes": 7332
+        },
+        {
+          "url": "/api/domains",
+          "status": 200,
+          "encoding": "none",
+          "type": "Fetch",
+          "transferBytes": 1082
+        },
+        {
+          "url": "/api/internships?page=1&limit=6",
+          "status": 200,
+          "encoding": "none",
+          "type": "Fetch",
+          "transferBytes": 1896
+        }
+      ],
+      "totalTransferBytes": 19932,
+      "requestCount": 6,
+      "domContentLoadedMs": 277,
+      "loadMs": 277,
+      "api": [
+        {
+          "url": "/api/domains",
+          "ms": 6
+        },
+        {
+          "url": "/api/internships?page=1&limit=6",
+          "ms": 19
+        }
+      ]
+    },
+    {
+      "label": "desktop viewport, cold cache",
+      "files": [
+        {
+          "url": "/",
+          "status": 200,
+          "encoding": "br",
+          "type": "Document",
+          "transferBytes": 4021
+        },
+        {
+          "url": "/styles.css",
+          "status": 200,
+          "encoding": "br",
+          "type": "Stylesheet",
+          "transferBytes": 4647
+        },
+        {
+          "url": "/config.js",
+          "status": 200,
+          "encoding": "none",
+          "type": "Script",
+          "transferBytes": 954
+        },
+        {
+          "url": "/app.js",
+          "status": 200,
+          "encoding": "br",
+          "type": "Script",
+          "transferBytes": 7332
+        },
+        {
+          "url": "/api/domains",
+          "status": 200,
+          "encoding": "none",
+          "type": "Fetch",
+          "transferBytes": 1082
+        },
+        {
+          "url": "/api/internships?page=1&limit=6",
+          "status": 200,
+          "encoding": "none",
+          "type": "Fetch",
+          "transferBytes": 1896
+        }
+      ],
+      "totalTransferBytes": 19932,
+      "requestCount": 6,
+      "domContentLoadedMs": 154,
+      "loadMs": 157,
+      "api": [
+        {
+          "url": "/api/domains",
+          "ms": 13
+        },
+        {
+          "url": "/api/internships?page=1&limit=6",
+          "ms": 19
+        }
+      ]
+    }
+  ],
+  "lighthouse": {
+    "mobile": {
+      "runs": [
+        {
+          "scores": {
+            "performance": 64,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "rawScores": {
+            "performance": 0.64,
+            "accessibility": 1,
+            "best-practices": 1,
+            "seo": 1
+          },
+          "metrics": {
+            "fcpMs": 1110,
+            "lcpMs": 1514,
+            "tbtMs": 2122,
+            "cls": 0,
+            "speedIndexMs": 7927,
+            "interactiveMs": 3809
+          },
+          "totalTransferBytes": 19932,
+          "requests": 6,
+          "failedAudits": [
+            "first-contentful-paint: First Contentful Paint",
+            "speed-index: Speed Index",
+            "total-blocking-time: Total Blocking Time",
+            "max-potential-fid: Max Potential First Input Delay",
+            "interactive: Time to Interactive",
+            "mainthread-work-breakdown: Minimize main-thread work",
+            "cache-insight: Use efficient cache lifetimes",
+            "forced-reflow-insight: Forced reflow",
+            "lcp-breakdown-insight: LCP breakdown",
+            "network-dependency-tree-insight: Network dependency tree",
+            "render-blocking-insight: Render-blocking requests"
+          ],
+          "lighthouseVersion": "13.5.0",
+          "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36"
+        },
+        {
+          "scores": {
+            "performance": 67,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "rawScores": {
+            "performance": 0.67,
+            "accessibility": 1,
+            "best-practices": 1,
+            "seo": 1
+          },
+          "metrics": {
+            "fcpMs": 1052,
+            "lcpMs": 1428,
+            "tbtMs": 1878,
+            "cls": 0,
+            "speedIndexMs": 6568,
+            "interactiveMs": 3409
+          },
+          "totalTransferBytes": 19932,
+          "requests": 6,
+          "failedAudits": [
+            "speed-index: Speed Index",
+            "total-blocking-time: Total Blocking Time",
+            "max-potential-fid: Max Potential First Input Delay",
+            "interactive: Time to Interactive",
+            "mainthread-work-breakdown: Minimize main-thread work",
+            "cache-insight: Use efficient cache lifetimes",
+            "lcp-breakdown-insight: LCP breakdown",
+            "network-dependency-tree-insight: Network dependency tree",
+            "render-blocking-insight: Render-blocking requests"
+          ],
+          "lighthouseVersion": "13.5.0",
+          "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36"
+        },
+        {
+          "scores": {
+            "performance": 72,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "rawScores": {
+            "performance": 0.72,
+            "accessibility": 1,
+            "best-practices": 1,
+            "seo": 1
+          },
+          "metrics": {
+            "fcpMs": 1155,
+            "lcpMs": 1583,
+            "tbtMs": 1207,
+            "cls": 0,
+            "speedIndexMs": 5142,
+            "interactiveMs": 2658
+          },
+          "totalTransferBytes": 19932,
+          "requests": 6,
+          "failedAudits": [
+            "first-contentful-paint: First Contentful Paint",
+            "largest-contentful-paint: Largest Contentful Paint",
+            "speed-index: Speed Index",
+            "total-blocking-time: Total Blocking Time",
+            "max-potential-fid: Max Potential First Input Delay",
+            "interactive: Time to Interactive",
+            "mainthread-work-breakdown: Minimize main-thread work",
+            "cache-insight: Use efficient cache lifetimes",
+            "lcp-breakdown-insight: LCP breakdown",
+            "network-dependency-tree-insight: Network dependency tree",
+            "render-blocking-insight: Render-blocking requests"
+          ],
+          "lighthouseVersion": "13.5.0",
+          "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36"
+        }
+      ],
+      "median": {
+        "performance": 67,
+        "accessibility": 100,
+        "bestPractices": 100,
+        "seo": 100,
+        "fcpMs": 1110,
+        "lcpMs": 1514,
+        "tbtMs": 1878,
+        "cls": 0,
+        "speedIndexMs": 6568
+      }
+    },
+    "desktop": {
+      "runs": [
+        {
+          "scores": {
+            "performance": 79,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "rawScores": {
+            "performance": 0.79,
+            "accessibility": 1,
+            "best-practices": 1,
+            "seo": 1
+          },
+          "metrics": {
+            "fcpMs": 502,
+            "lcpMs": 673,
+            "tbtMs": 305,
+            "cls": 0,
+            "speedIndexMs": 3388,
+            "interactiveMs": 1045
+          },
+          "totalTransferBytes": 19932,
+          "requests": 6,
+          "failedAudits": [
+            "largest-contentful-paint: Largest Contentful Paint",
+            "speed-index: Speed Index",
+            "total-blocking-time: Total Blocking Time",
+            "max-potential-fid: Max Potential First Input Delay",
+            "mainthread-work-breakdown: Minimize main-thread work",
+            "cache-insight: Use efficient cache lifetimes",
+            "lcp-breakdown-insight: LCP breakdown",
+            "network-dependency-tree-insight: Network dependency tree",
+            "render-blocking-insight: Render-blocking requests"
+          ],
+          "lighthouseVersion": "13.5.0",
+          "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36"
+        },
+        {
+          "scores": {
+            "performance": 87,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "rawScores": {
+            "performance": 0.87,
+            "accessibility": 1,
+            "best-practices": 1,
+            "seo": 1
+          },
+          "metrics": {
+            "fcpMs": 381,
+            "lcpMs": 492,
+            "tbtMs": 209,
+            "cls": 0,
+            "speedIndexMs": 2786,
+            "interactiveMs": 901
+          },
+          "totalTransferBytes": 19932,
+          "requests": 6,
+          "failedAudits": [
+            "speed-index: Speed Index",
+            "total-blocking-time: Total Blocking Time",
+            "max-potential-fid: Max Potential First Input Delay",
+            "mainthread-work-breakdown: Minimize main-thread work",
+            "cache-insight: Use efficient cache lifetimes",
+            "forced-reflow-insight: Forced reflow",
+            "lcp-breakdown-insight: LCP breakdown",
+            "network-dependency-tree-insight: Network dependency tree",
+            "render-blocking-insight: Render-blocking requests"
+          ],
+          "lighthouseVersion": "13.5.0",
+          "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36"
+        },
+        {
+          "scores": {
+            "performance": 98,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "rawScores": {
+            "performance": 0.98,
+            "accessibility": 1,
+            "best-practices": 1,
+            "seo": 1
+          },
+          "metrics": {
+            "fcpMs": 295,
+            "lcpMs": 362,
+            "tbtMs": 3,
+            "cls": 0.001,
+            "speedIndexMs": 1570,
+            "interactiveMs": 372
+          },
+          "totalTransferBytes": 19932,
+          "requests": 6,
+          "failedAudits": [
+            "speed-index: Speed Index",
+            "mainthread-work-breakdown: Minimize main-thread work",
+            "cache-insight: Use efficient cache lifetimes",
+            "network-dependency-tree-insight: Network dependency tree",
+            "render-blocking-insight: Render-blocking requests"
+          ],
+          "lighthouseVersion": "13.5.0",
+          "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36"
+        }
+      ],
+      "median": {
+        "performance": 87,
+        "accessibility": 100,
+        "bestPractices": 100,
+        "seo": 100,
+        "fcpMs": 381,
+        "lcpMs": 492,
+        "tbtMs": 209,
+        "cls": 0,
+        "speedIndexMs": 2786
+      }
+    }
+  }
+}

@@ -76,6 +76,12 @@ function listInternships(req, res) {
   });
 }
 
+// GET /api/domains  (names used by the filter drop-down; avoids downloading every internship for it)
+function listDomains(req, res) {
+  const rows = db.prepare('SELECT DISTINCT domain FROM internships ORDER BY domain COLLATE NOCASE ASC').all();
+  sendSuccess(res, rows.map((row) => row.domain));
+}
+
 // GET /api/internships/:id
 function getInternship(req, res) {
   const row = findInternshipRow(req.params.id);
@@ -134,4 +140,4 @@ function deleteInternship(req, res) {
   sendSuccess(res, { message: 'Internship deleted successfully' });
 }
 
-module.exports = { listInternships, getInternship, createInternship, updateInternship, deleteInternship };
+module.exports = { listDomains, listInternships, getInternship, createInternship, updateInternship, deleteInternship };
