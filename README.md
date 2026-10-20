@@ -219,7 +219,9 @@ https://github.com/vanshsaini982006-byte/edvyro-task-4-internship-board.git
 
 ## 19. Walkthrough video
 
-`PASTE YOUR VIDEO LINK HERE AFTER YOU UPLOAD IT`. Recording script: [`docs/walkthrough.md`](docs/walkthrough.md).
+[Watch Task 4 Walkthrough Video](https://drive.google.com/file/d/10Tz5aQ6VudgzbwVCeKttZLbwNFOMdi5i/view?usp=sharing)
+
+Recording script: [`docs/walkthrough.md`](docs/walkthrough.md).
 
 ## 20. Known limitations
 
