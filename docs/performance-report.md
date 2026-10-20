@@ -107,7 +107,12 @@ In all 12 Task 4 runs of the A/B test, Lighthouse listed these four items as bel
 
 | Date | URL | Device | Perf | A11y | Best practices | SEO | Notes |
 |------|-----|--------|------|------|----------------|-----|-------|
-| _(fill in after you run it)_ | | | | | | | |
+| 2026-10-20 | https://edvyro-task-3-internship-board.onrender.com | Mobile | 100 | 100 | 100 | 100 | Incognito, Run 1 |
+| 2026-10-20 | https://edvyro-task-3-internship-board.onrender.com | Mobile | 100 | 100 | 100 | 100 | Incognito, Run 2 |
+| 2026-10-20 | https://edvyro-task-3-internship-board.onrender.com | Mobile | 96 | 100 | 100 | 100 | Incognito, Run 3 |
+| 2026-10-20 | https://edvyro-task-3-internship-board.onrender.com | Desktop | 99 | 100 | 100 | 100 | Incognito, Run 1 |
+| 2026-10-20 | https://edvyro-task-3-internship-board.onrender.com | Desktop | 100 | 100 | 100 | 100 | Incognito, Run 2 |
+| 2026-10-20 | https://edvyro-task-3-internship-board.onrender.com | Desktop | 99 | 100 | 100 | 100 | Incognito, Run 3 |
 
 **Repeat my local measurements.** In one PowerShell window run `npm start`. In a second:
 
