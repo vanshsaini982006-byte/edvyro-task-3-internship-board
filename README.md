@@ -215,7 +215,7 @@ The deployment recorded in the previous version of this README: https://edvyro-t
 
 ## 18. GitHub repository URL
 
-`PASTE YOUR PUBLIC REPOSITORY LINK HERE` (for example `https://github.com/<your-username>/<your-repository>`)
+https://github.com/vanshsaini982006-byte/edvyro-task-4-internship-board.git
 
 ## 19. Walkthrough video
 
