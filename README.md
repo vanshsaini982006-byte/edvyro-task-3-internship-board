@@ -209,9 +209,11 @@ Accessibility, best-practices and SEO scored 100 in all 24 runs. These numbers a
 
 ## 17. Live website URL
 
-The deployment recorded in the previous version of this README: https://edvyro-task-2-internship-board.onrender.com
+**Task 4 Live Project:** [Open Live Website](https://edvyro-task-3-internship-board.onrender.com)
 
-**Before submitting:** push Task 4, wait for Render to redeploy, open `/api/health` and confirm `"database":"ok"` and a `version` field (this proves the new code is live), and replace or confirm the URL here. I have not deployed anything or checked this site.
+The Task 4 project is deployed and the latest Task 4 changes are visible on the live website.
+
+**Health Check:** [Check API Health](https://edvyro-task-3-internship-board.onrender.com/api/health)
 
 ## 18. GitHub repository URL
 
